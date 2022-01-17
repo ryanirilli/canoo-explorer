@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { Box } from "@chakra-ui/react";
+import { Box, Flex, HStack, Spinner, Heading } from "@chakra-ui/react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Suspense, useRef } from "react";
 import * as THREE from "three";
 import { useControls } from "leva";
-import { OrbitControls, useFBX, useTexture } from "@react-three/drei";
+import { OrbitControls, useFBX, useProgress } from "@react-three/drei";
 
 const body = new Set([
   "09_shell1",
@@ -81,7 +81,7 @@ function Content(): JSX.Element {
       let winshield: THREE.Mesh | null = null;
       obj.traverse((child) => {
         if (child instanceof THREE.Mesh) {
-          console.log(child.name);
+          // console.log(child.name);
           child.material.opacity = 1;
           if (body.has(child.name)) {
             child.material = bodyMaterial;
@@ -166,10 +166,10 @@ function Content(): JSX.Element {
         penumbra={1}
         shadowBias={-0.0003}
       />
-
+      <fog attach="fog" args={["black", 20, 70]} />
       <OrbitControls
         enablePan={true}
-        enableZoom={true}
+        enableZoom={false}
         enableRotate={true}
         target={[0, 1.1, 0]}
       />
@@ -193,14 +193,14 @@ function Content(): JSX.Element {
 }
 
 export default function Scene() {
-  const [isMounted, setIsMoumted] = useState<Boolean>(false);
+  const [isMounted, setIsMounted] = useState<Boolean>(false);
   useEffect(() => {
-    setIsMoumted(true);
+    setIsMounted(true);
   }, []);
   return (
     <Box h="100vh" w="100vw" bgGradient="radial(gray.900, black)">
       {isMounted ? (
-        <Suspense fallback="...loading">
+        <Suspense fallback={<Loading />}>
           <Canvas
             shadows
             camera={{
@@ -214,5 +214,16 @@ export default function Scene() {
         </Suspense>
       ) : null}
     </Box>
+  );
+}
+
+function Loading() {
+  return (
+    <Flex color="white" h="100%" justify="center" align="center">
+      <HStack>
+        <Spinner speed="0.65s" />
+        <Heading size="md">loading...</Heading>
+      </HStack>
+    </Flex>
   );
 }
