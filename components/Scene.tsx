@@ -3,16 +3,8 @@ import { Box } from "@chakra-ui/react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Suspense, useRef } from "react";
 import * as THREE from "three";
-import { useControls, Leva } from "leva";
-import {
-  OrbitControls,
-  useHelper,
-  useFBX,
-  TransformControls,
-  GizmoHelper,
-  GizmoViewport,
-  useTexture,
-} from "@react-three/drei";
+import { useControls } from "leva";
+import { OrbitControls, useFBX, useTexture } from "@react-three/drei";
 
 const body = new Set([
   "09_shell1",
@@ -63,16 +55,11 @@ const rotSpeed = 0.001;
 
 function Content(): JSX.Element {
   const obj = useFBX("/LV_Export_300K.fbx");
-  const texture = useTexture("/omar-flores-lQT_bOWtysE-unsplash.jpg");
   const light = useRef();
   const light2 = useRef();
   const light3 = useRef();
   const light4 = useRef();
   const ref = useRef<THREE.Mesh>();
-  //   useHelper(light, THREE.SpotLightHelper, "cyan");
-  //   useHelper(light2, THREE.SpotLightHelper, "cyan");
-  //   useHelper(light3, THREE.SpotLightHelper, "cyan");
-  //   useHelper(light4, THREE.SpotLightHelper, "cyan");
 
   const colors = useControls({
     body: { r: 21, b: 237, g: 245 },
