@@ -8,9 +8,18 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "next": "12.0.8",
-    "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "@chakra-ui/react": "^1.7.4",
+    "@emotion/react": "^11.7.1",
+    "@emotion/styled": "^11.6.0",
+    "@react-three/drei": "^8.4.0",
+    "@react-three/fiber": "^7.0.24",
+    "@types/three": "^0.136.1",
+    "framer-motion": "^5.6.0",
+    "leva": "^0.9.18",
+    "next": "^12.0.8",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "three": "^0.136.0"
   },
   "devDependencies": {
     "@types/node": "17.0.8",
