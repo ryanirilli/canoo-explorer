@@ -46,6 +46,11 @@ const headlightMaterial = new THREE.MeshPhongMaterial({
   emissive: "#3d3d3d",
 });
 
+const rimsMaterial = new THREE.MeshPhongMaterial({
+  color: "#91D0CC",
+  dithering: true,
+});
+
 const tireMaterial = new THREE.MeshPhongMaterial({
   color: "#424242",
   dithering: true,
@@ -63,6 +68,7 @@ function Content(): JSX.Element {
 
   const colors = useControls({
     body: { r: 21, b: 237, g: 245 },
+    rims: { r: 16, b: 16, g: 16 },
   });
 
   const { rotate } = useControls({ rotate: true });
@@ -79,6 +85,7 @@ function Content(): JSX.Element {
     if (obj) {
       let tint: THREE.Material | null = null;
       let winshield: THREE.Mesh | null = null;
+
       obj.traverse((child) => {
         if (child instanceof THREE.Mesh) {
           // console.log(child.name);
@@ -99,9 +106,11 @@ function Content(): JSX.Element {
           if (tint && winshield) {
             winshield.material = tint;
           }
-
           if (child.name.includes("pCylinder")) {
             child.material = tireMaterial;
+          }
+          if (child.name.includes("node#")) {
+            child.material = rimsMaterial;
           }
 
           if (
@@ -121,6 +130,11 @@ function Content(): JSX.Element {
       colors.body.r / 255,
       colors.body.g / 255,
       colors.body.b / 255
+    );
+    rimsMaterial.color.setRGB(
+      colors.rims.r / 255,
+      colors.rims.g / 255,
+      colors.rims.b / 255
     );
   }, [colors]);
 
