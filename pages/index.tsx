@@ -6,11 +6,11 @@ const Home: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Canoo Explorer - a react-three-fiber scene of a Canoo LV</title>
+        <title>Canoo Lifestyle Vehicle rendered using react-three-fiber</title>
         <meta
           prefix="og: http://ogp.me/ns#"
           property="og:title"
-          content="Canoo Explorer - a react-three-fiber scene of a Canoo LV by Ryan Irilli"
+          content="Canoo Lifestyle Vehicle rendered using react-three-fiber"
         />
         <meta
           prefix="og: http://ogp.me/ns#"
