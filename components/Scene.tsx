@@ -281,12 +281,14 @@ function Info() {
       color="white"
       position="absolute"
       left={[8, null, 16]}
-      bottom={[8, null, 16]}
+      bottom={[16, null, 16]}
       zIndex="docked"
     >
-      <Heading size="md">
-        <strong>Canoo Lifestyle Vehicle</strong>
-      </Heading>
+      <Link href="https://canoo.com">
+        <Heading size="md">
+          <strong>Canoo Lifestyle Vehicle</strong>
+        </Heading>
+      </Link>
       <Heading size="sm" py={2}>
         @ryanirilli
       </Heading>
