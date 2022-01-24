@@ -80,7 +80,6 @@ function Content(): JSX.Element {
   const { rotate } = useControls({ rotate: true });
 
   useFrame(({ camera }) => {
-    console.log(camera.position);
     if (rotate) {
       const { x, z } = camera.position;
       camera.position.x = x * Math.cos(rotSpeed) - z * Math.sin(rotSpeed);
