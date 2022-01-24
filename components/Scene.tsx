@@ -4,7 +4,7 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { Suspense, useRef } from "react";
 import * as THREE from "three";
 import { useControls } from "leva";
-import { OrbitControls, useFBX, useProgress } from "@react-three/drei";
+import { OrbitControls, useFBX, useCubeTexture } from "@react-three/drei";
 
 const body = new Set([
   "09_shell1",
@@ -36,7 +36,9 @@ const headlights = new Set([
 
 const bodyMaterial = new THREE.MeshPhongMaterial({
   color: "#91D0CC",
+  reflectivity: 0.2,
   dithering: true,
+  shininess: 0.4,
 });
 
 const headlightMaterial = new THREE.MeshPhongMaterial({
@@ -60,6 +62,10 @@ const rotSpeed = 0.001;
 
 function Content(): JSX.Element {
   const obj = useFBX("/LV_Export_300K.fbx");
+  const envMap = useCubeTexture(
+    ["front.jpg", "back.jpg", "up.jpg", "down.jpg", "left.jpg", "right.jpg"],
+    { path: "/environment/garage/" }
+  );
   const light = useRef();
   const light2 = useRef();
   const light3 = useRef();
@@ -67,13 +73,14 @@ function Content(): JSX.Element {
   const ref = useRef<THREE.Mesh>();
 
   const colors = useControls({
-    body: { r: 21, b: 237, g: 245 },
+    body: { r: 36, b: 39, g: 37 },
     rims: { r: 16, b: 16, g: 16 },
   });
 
   const { rotate } = useControls({ rotate: true });
 
   useFrame(({ camera }) => {
+    console.log(camera.position);
     if (rotate) {
       const { x, z } = camera.position;
       camera.position.x = x * Math.cos(rotSpeed) - z * Math.sin(rotSpeed);
@@ -92,6 +99,7 @@ function Content(): JSX.Element {
           child.material.opacity = 1;
           if (body.has(child.name)) {
             child.material = bodyMaterial;
+            child.material.envMap = envMap;
           }
           if (headlights.has(child.name)) {
             child.material = headlightMaterial;
@@ -123,7 +131,7 @@ function Content(): JSX.Element {
         }
       });
     }
-  }, [obj]);
+  }, [obj, envMap]);
 
   useEffect(() => {
     bodyMaterial.color.setRGB(
@@ -180,10 +188,10 @@ function Content(): JSX.Element {
         penumbra={1}
         shadowBias={-0.0003}
       />
-      <fog attach="fog" args={["black", 20, 70]} />
+      <fog attach="fog" args={["black", 20, 40]} />
       <OrbitControls
         enablePan={true}
-        enableZoom={false}
+        enableZoom={true}
         enableRotate={true}
         target={[0, 1.1, 0]}
       />
@@ -218,8 +226,8 @@ export default function Scene() {
           <Canvas
             shadows
             camera={{
-              fov: 7,
-              position: [-30.2, 6, 22.3],
+              fov: 15,
+              position: [-8, 2, 16],
               filmGauge: 14,
             }}
           >
