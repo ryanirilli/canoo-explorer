@@ -1,10 +1,24 @@
 import { useEffect, useState } from "react";
-import { Box, Flex, HStack, Spinner, Heading } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  Spinner,
+  Heading,
+  HStack,
+  Icon,
+  Link,
+  useBreakpointValue,
+} from "@chakra-ui/react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Suspense, useRef } from "react";
 import * as THREE from "three";
 import { useControls } from "leva";
 import { OrbitControls, useFBX, useCubeTexture } from "@react-three/drei";
+import {
+  AiFillTwitterCircle,
+  AiFillGithub,
+  AiFillInstagram,
+} from "react-icons/ai";
 
 const body = new Set([
   "09_shell1",
@@ -36,7 +50,7 @@ const headlights = new Set([
 
 const bodyMaterial = new THREE.MeshPhongMaterial({
   color: "#91D0CC",
-  reflectivity: 0.2,
+  reflectivity: 0.4,
   dithering: true,
   shininess: 0.4,
 });
@@ -66,11 +80,12 @@ function Content(): JSX.Element {
     ["front.jpg", "back.jpg", "up.jpg", "down.jpg", "left.jpg", "right.jpg"],
     { path: "/environment/garage/" }
   );
+
   const light = useRef();
   const light2 = useRef();
   const light3 = useRef();
   const light4 = useRef();
-  const ref = useRef<THREE.Mesh>();
+  const vehicleRef = useRef<THREE.Mesh>();
 
   const colors = useControls({
     body: { r: 36, b: 39, g: 37 },
@@ -120,12 +135,12 @@ function Content(): JSX.Element {
             child.material = rimsMaterial;
           }
 
+          // wheels do not cast shadow
           if (
             !child.name.includes("pCylinder") &&
             !child.name.includes("node#")
           ) {
             child.castShadow = true;
-            child.receiveShadow = true;
           }
         }
       });
@@ -187,16 +202,15 @@ function Content(): JSX.Element {
         penumbra={1}
         shadowBias={-0.0003}
       />
-      <fog attach="fog" args={["black", 20, 40]} />
+
       <OrbitControls
         enablePan={true}
-        enableZoom={true}
+        enableZoom={false}
         enableRotate={true}
         target={[0, 1.1, 0]}
       />
-
       <primitive
-        ref={ref}
+        ref={vehicleRef}
         object={obj}
         position={[-5.5, 0, 0]}
         scale={[0.01, 0.01, 0.01]}
@@ -204,9 +218,8 @@ function Content(): JSX.Element {
         receiveShadow={true}
         castShadow={true}
       />
-
       <gridHelper
-        args={[30, 30, `#0D0D0D`, `#0D0D0D`]}
+        args={[60, 60, `#0D0D0D`, `#0D0D0D`]}
         position={[0, 0.1, 0]}
       />
     </>
@@ -215,6 +228,17 @@ function Content(): JSX.Element {
 
 export default function Scene() {
   const [isMounted, setIsMounted] = useState<Boolean>(false);
+
+  const camPosition = useBreakpointValue<THREE.Vector3>({
+    base: new THREE.Vector3(34, 14, -38),
+    md: new THREE.Vector3(-8, 2, 16),
+  });
+
+  const fogArgs = useBreakpointValue<any>({
+    base: ["black", 45, 65],
+    md: ["black", 20, 40],
+  });
+
   useEffect(() => {
     setIsMounted(true);
   }, []);
@@ -226,12 +250,14 @@ export default function Scene() {
             shadows
             camera={{
               fov: 15,
-              position: [-8, 2, 16],
+              position: camPosition,
               filmGauge: 14,
             }}
           >
             <Content />
+            <fog attach="fog" args={fogArgs} />
           </Canvas>
+          <Info />
         </Suspense>
       ) : null}
     </Box>
@@ -246,5 +272,35 @@ function Loading() {
         <Heading size="md">loading...</Heading>
       </HStack>
     </Flex>
+  );
+}
+
+function Info() {
+  return (
+    <Box
+      color="white"
+      position="absolute"
+      left={[8, null, 16]}
+      bottom={[8, null, 16]}
+      zIndex="docked"
+    >
+      <Heading size="md">
+        <strong>Canoo Lifestyle Vehicle</strong>
+      </Heading>
+      <Heading size="sm" py={2}>
+        @ryanirilli
+      </Heading>
+      <HStack>
+        <Link href="https://github.com/ryanirilli">
+          <Icon as={AiFillGithub} boxSize={8} />
+        </Link>
+        <Link href="https://twitter.com/ryanirilli">
+          <Icon as={AiFillTwitterCircle} boxSize={8} />
+        </Link>
+        <Link href="https://www.instagram.com/ryanirilli/">
+          <Icon as={AiFillInstagram} boxSize={8} />
+        </Link>
+      </HStack>
+    </Box>
   );
 }
