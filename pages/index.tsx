@@ -15,12 +15,12 @@ const Home: NextPage = () => {
         <meta
           prefix="og: http://ogp.me/ns#"
           property="og:image"
-          content="https://canoo-explorer-omega.vercel.app/meta-image.jpg"
+          content="https://vehicle-explorer.vercel.app/meta-image.jpg"
         />
         <meta
           prefix="og: http://ogp.me/ns#"
           property="og:url"
-          content="https://canoo-explorer-omega.vercel.app/"
+          content="https://vehicle-explorer.vercel.app/"
         />
       </Head>
       <Scene />
